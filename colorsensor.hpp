@@ -1,12 +1,11 @@
-#ifndef SERVOCODE_H
-#define SERVOCODE_H
+#pragma once
 
 #include <Arduino.h>
 
-class ColorSensors {
+class ColorSensor {
 
   public:
-    ColorSensors(int S3, int Out);
+    ColorSensor(int S3, int Out);
 
     void setup();
 
@@ -19,4 +18,3 @@ class ColorSensors {
     const int pin_s3;
     const int pin_out;
 };
-#endif

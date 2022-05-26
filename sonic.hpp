@@ -1,5 +1,4 @@
-#ifndef SONICSENSORCODE_H
-#define SONICSENSORCODE_H
+#pragma once
 
 #include <Arduino.h>
 
@@ -15,4 +14,3 @@ class Sonic{
     const int pin_echo;
     const int pin_trig;
 };
-#endif

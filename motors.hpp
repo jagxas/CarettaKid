@@ -1,13 +1,12 @@
-#ifndef DCMOTORCODE_H
-#define DCMOTORCODE_H
+#pragma once
 
 #include <Arduino.h>
 
-class DC{
+class Motors{
 
   public:
 
-    DC(int M1F, int M1B, int M2F, int M2B, int M1S, int M2S);
+    Motors(int M1F, int M1B, int M2F, int M2B, int M1S, int M2S);
     void setup();
     void go();
     void step_back();
@@ -20,4 +19,3 @@ class DC{
     const int pin_m1s;
     const int pin_m2s;
 };
-#endif

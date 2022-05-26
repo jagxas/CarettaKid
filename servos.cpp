@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <Servo.h>
 #include "peripherals.hpp"
+#include "constants.hpp"
 #include "servos.hpp"
 
 static Servo PuckServo;
