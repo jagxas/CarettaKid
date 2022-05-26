@@ -56,30 +56,20 @@ void loop(){
   //Color
   int RedValue1 = Color1.read_color(ColorSensors::Colors::Red);
   int BlueValue1 = Color1.read_color(ColorSensors::Colors::Blue);
-  
-  //Comparison of Colors Here
-  int FirstSensorColor = 0;
-  if(RedValue1 > 100){FirstSensorColor = 1;}
-  if(BlueValue1 > 100){FirstSensorColor = 2;}
 
   //Color
   int RedValue2 = Color2.read_color(ColorSensors::Colors::Red);
   int BlueValue2 = Color2.read_color(ColorSensors::Colors::Blue); 
-  //Comparison of Colors Here
-  int SecondSensorColor = 0;
-  if(RedValue2 > 100){SecondSensorColor = 1;}
-  if(BlueValue2 > 100){SecondSensorColor = 2;}
 
 
   //Servo
-  if(FirstSensorColor == 1){
+  if (RedValue1 > 100){
     #ifdef IS_TEAM_BLUE
       Servos::S1::dont_take_it();
     #else
       Servos::S1::take_it();
     #endif
-  }
-  if(FirstSensorColor == 2){
+  } else if (BlueValue1 > 100) {
     #ifdef IS_TEAM_BLUE
       Servos::S1::take_it();
     #else
@@ -87,23 +77,19 @@ void loop(){
     #endif
   }
 
-  if(SecondSensorColor == 1){
+  if (RedValue2 > 100) {
     #ifdef IS_TEAM_BLUE
       Servos::S2::close();
     #else
       Servos::S2::open();
     #endif
-  }
-
-  if(SecondSensorColor == 2){
+  } else if (BlueValue2 > 100){
     #ifdef IS_TEAM_BLUE
       Servos::S2::open();
     #else
       Servos::S2::close();
     #endif
-  }
-
-  if(SecondSensorColor == 0) {
+  } else {
     Servos::S2::close();
   }
 

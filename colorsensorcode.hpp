@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-class ColorSensors{
+class ColorSensors {
 
   public:
     ColorSensors(int S3, int Out);
