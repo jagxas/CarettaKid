@@ -1,27 +1,21 @@
-#include "colorsensorcode.h"
+#include "colorsensorcode.hpp"
+#include "peripherals.hpp"
 
+ColorSensors::ColorSensors(int S3, int Out) : pin_s3(S3), pin_out(Out) {
 
-void ColorSensors::ColorSetup(int S3, int Out){
-	pinMode(S3, OUTPUT);
-	pinMode(Out, INPUT);
 }
 
-int ColorSensors::getRedPW(int S3, int Out){
-	digitalWrite(S3, LOW);
-	int PW = pulseIn(Out, LOW);
-	return PW;
+void ColorSensors::setup(){
+	pinMode(this->pin_s3, OUTPUT);
+	pinMode(this->pin_out, INPUT);
 }
 
-int ColorSensors::getBluePW(int S3, int Out){
-	digitalWrite(S3, HIGH);
-	int PW = pulseIn(Out, LOW);
-	return PW;
-}
+int ColorSensors::read_color(Colors col){
+  	digitalWrite(this->pin_s3, col == Colors::Blue ? HIGH : LOW);
+	int PW = pulseIn(this->pin_out, LOW);
 
-int ColorSensors::ActualColorValue(int PW, int MaxVal, int MinVal){
-  	
-	int Value = map(PW, MaxVal, MinVal, 255, 0);
-	delay(200);
+	int Value = map(PW, RGB_MAX, RGB_MIN, 255, 0);
+	delay(200); //Okay, but w h y ????
 	return Value;
 
 }

@@ -1,30 +1,30 @@
-#include "dcmotorcode.h"
-#include "sonicsensorcode.h"
-#include "colorsensorcode.h"
-#include "servomotorcode.h"
-#include <Servo.h>
+#include "dcmotorcode.hpp"
+#include "sonicsensorcode.hpp"
+#include "colorsensorcode.hpp"
 
-#define Team "Blue"
+#include "peripherals.hpp"
 
-ColorSensors Color1;
-ColorSensors Color2;
-Sonic RightSonic;
-Sonic LeftSonic;
-DC DCMotors;
-MS ServoMotor;
+#include "servos.hpp"
+
+ColorSensors Color1(PIN_COLOR1_S3, PIN_COLOR1_OUT);
+ColorSensors Color2(PIN_COLOR2_S3, PIN_COLOR2_OUT);
+Sonic RightSonic(PIN_SONIC_RIGHT_ECHO, PIN_SONIC_RIGHT_TRIG);
+Sonic LeftSonic(PIN_SONIC_LEFT_ECHO, PIN_SONIC_LEFT_TRIG);
+DC DCMotors(PIN_M1F, PIN_M1B, PIN_M2F, PIN_M2B, PIN_M1S, PIN_M2S);
+
 
 
 void setup(){
   //Call all the setup functions here
-  Color1.ColorSetup(Color1.Color1_S3, Color1.Color1_OUT);
-  Color2.ColorSetup(Color2.Color2_S3, Color2.Color2_OUT);
+  Color1.setup();
+  Color2.setup();
 
-  DCMotors.DCSetup(DCMotors.LeftForwards, DCMotors.LeftBackwards, DCMotors.RightForwards, DCMotors.RightBackwards, DCMotors.SpeedPin1, DCMotors.SpeedPin2); 
+  DCMotors.setup();
 
-  RightSonic.SetupSonic(RightSonic.EchoRightPin, RightSonic.RightTrigPin);
-  LeftSonic.SetupSonic(LeftSonic.EchoLeftPin, LeftSonic.LeftTrigPin);
+  RightSonic.setup();
+  LeftSonic.setup();
 
-  ServoMotor.SetupServo(ServoMotor.ServoPin1, ServoMotor.ServoPin2);
+  Servos::setup_servos();
   
   Serial.begin(9600);
 }
@@ -36,28 +36,26 @@ void setup(){
 void loop(){
   
   //Sonic
-  double DistanceR = RightSonic.CalculateDistance(RightSonic.Max, RightSonic.Min, RightSonic.EchoRightPin, RightSonic.RightTrigPin);
-  double DistanceL = LeftSonic.CalculateDistance(LeftSonic.Max, LeftSonic.Min, LeftSonic.EchoLeftPin, LeftSonic.LeftTrigPin);
+  double DistanceR = RightSonic.distance();
+  double DistanceL = LeftSonic.distance();
 
   
   //DC
   if(DistanceR > 10 && DistanceL > 10){
-    DCMotors.go(DCMotors.LeftForwards, DCMotors.LeftBackwards, DCMotors.RightForwards, DCMotors.RightBackwards, DCMotors.SpeedPin1, DCMotors.SpeedPin2, DCMotors.CruiseSpeed);
+    DCMotors.go();
     delay(100);
     }    
   if(DistanceR < 10 && DistanceL < 10){
-    DCMotors.stepBack(DCMotors.LeftForwards, DCMotors.LeftBackwards, DCMotors.RightForwards, DCMotors.RightBackwards, DCMotors.SpeedPin1, DCMotors.SpeedPin2, DCMotors.CruiseSpeed);
+    DCMotors.step_back();
     delay(30);
-    DCMotors.turnRight(DCMotors.LeftForwards, DCMotors.LeftBackwards, DCMotors.RightForwards, DCMotors.RightBackwards, DCMotors.SpeedPin1, DCMotors.SpeedPin2, DCMotors.TurningSpeed);
+    DCMotors.turn_right();
     delay(100);
-    }
+  }
 
                                                                                  
   //Color
-  int RedPulseWidth1 = Color1.getRedPW(Color1.Color1_S3, Color1.Color1_OUT);
-  int BluePulseWidth1 = Color1.getBluePW(Color1.Color1_S3, Color1.Color1_OUT);
-  int RedValue1 = Color1.ActualColorValue(RedPulseWidth1, Color1.RedMaximum, Color1.RedMinimum);
-  int BlueValue1 = Color1.ActualColorValue(BluePulseWidth1, Color1.BlueMaximum, Color1.BlueMinimum);
+  int RedValue1 = Color1.read_color(ColorSensors::Colors::Red);
+  int BlueValue1 = Color1.read_color(ColorSensors::Colors::Blue);
   
   //Comparison of Colors Here
   int FirstSensorColor = 0;
@@ -65,11 +63,8 @@ void loop(){
   if(BlueValue1 > 100){FirstSensorColor = 2;}
 
   //Color
-  int RedPulseWidth2 = Color2.getRedPW(Color2.Color1_S3, Color2.Color2_OUT);
-  int BluePulseWidth2 = Color2.getBluePW(Color2.Color1_S3, Color2.Color2_OUT);
-  int RedValue2 = Color2.ActualColorValue(RedPulseWidth2, Color2.RedMaximum, Color2.RedMinimum);
-  int BlueValue2 = Color2.ActualColorValue(BluePulseWidth2, Color2.BlueMaximum, Color2.BlueMinimum);
-  
+  int RedValue2 = Color2.read_color(ColorSensors::Colors::Red);
+  int BlueValue2 = Color2.read_color(ColorSensors::Colors::Blue); 
   //Comparison of Colors Here
   int SecondSensorColor = 0;
   if(RedValue2 > 100){SecondSensorColor = 1;}
@@ -78,22 +73,38 @@ void loop(){
 
   //Servo
   if(FirstSensorColor == 1){
-    if(Team == "Red"){ServoMotor.Servo1_TakeIt();}
-    if(Team == "Blue"){ServoMotor.Servo1_DontTakeIt();}
+    #ifdef IS_TEAM_BLUE
+      Servos::S1::dont_take_it();
+    #else
+      Servos::S1::take_it();
+    #endif
   }
   if(FirstSensorColor == 2){
-    if(Team == "Red"){ServoMotor.Servo1_DontTakeIt();}
-    if(Team == "Blue"){ServoMotor.Servo1_TakeIt();}
+    #ifdef IS_TEAM_BLUE
+      Servos::S1::take_it();
+    #else
+      Servos::S1::dont_take_it();
+    #endif
   }
 
   if(SecondSensorColor == 1){
-    if(Team == "Red"){ServoMotor.Servo2_Open();}
-    if(Team == "Blue"){ServoMotor.Servo2_Close();}
+    #ifdef IS_TEAM_BLUE
+      Servos::S2::close();
+    #else
+      Servos::S2::open();
+    #endif
   }
+
   if(SecondSensorColor == 2){
-    if(Team == "Red"){ServoMotor.Servo2_Close();}
-    if(Team == "Blue"){ServoMotor.Servo2_Open();}
+    #ifdef IS_TEAM_BLUE
+      Servos::S2::open();
+    #else
+      Servos::S2::close();
+    #endif
   }
-  if(SecondSensorColor == 0){ServoMotor.Servo2_Close();}
-  
+
+  if(SecondSensorColor == 0) {
+    Servos::S2::close();
+  }
+
 }

@@ -1,29 +1,31 @@
-#include "sonicsensorcode.h"
+#include "sonicsensorcode.hpp"
+#include "peripherals.hpp"
 
-void Sonic::SetupSonic(int EchoPin, int TrigPin) {
-  pinMode(TrigPin,OUTPUT);
-  pinMode(EchoPin,INPUT);
-  Serial.begin(9600); 
+Sonic::Sonic(int EchoPin, int TrigPin) : pin_echo(EchoPin), pin_trig(TrigPin) {
+
 }
 
-double Sonic::CalculateDistance(double Max, double Min, int SensorPin, int EchoTrigPin){
+void Sonic::setup() {
+  pinMode(pin_trig, OUTPUT);
+  pinMode(pin_echo, INPUT);
+}
+
+double Sonic::distance(){
   double Time=0.0, Distance=0.0;
-  digitalWrite(EchoTrigPin,LOW);
+  digitalWrite(pin_trig,LOW);
   delayMicroseconds(2);
-  digitalWrite(EchoTrigPin,HIGH);
+  digitalWrite(pin_trig,HIGH);
   delayMicroseconds(10);
-  digitalWrite(EchoTrigPin,LOW);
-  Time = pulseIn(SensorPin,HIGH);
+  digitalWrite(pin_trig,LOW);
+  Time = pulseIn(pin_echo,HIGH);
   Distance = Time / 58.2;
   delay(50);
   
-  
-  if(Distance>=Max || Distance<=Min){
+  if(Distance>=DISTANCE_MAX || Distance<=DISTANCE_MIN){
     return 0;
   }
   else{
     return Distance;
   }
-  
-  
+
 }
