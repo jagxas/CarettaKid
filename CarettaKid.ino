@@ -45,7 +45,8 @@ void loop(){
   if(DistanceR > 10 && DistanceL > 10){
     DCMotors.go();
     delay(100);
-    }    
+  }
+
   if(DistanceR < 10 && DistanceL < 10){
     DCMotors.step_back();
     delay(30);
