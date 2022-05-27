@@ -34,3 +34,7 @@
 #define PIN_SONIC_LEFT_TRIG 25
 #define PIN_SONIC_RIGHT_ECHO A5
 #define PIN_SONIC_RIGHT_TRIG 0
+
+//Team Switch Pin
+
+#define PIN_IS_TEAM_BLUE 31

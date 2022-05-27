@@ -20,12 +20,3 @@
 
 #define DISTANCE_MAX 50.0
 #define DISTANCE_MIN 0.5
-
-// -- TEAM --
-
-// Comment to make the robot be team red instead
-// Like this:
-
-// #define IS_TEAM_BLUE
-
-#define IS_TEAM_BLUE

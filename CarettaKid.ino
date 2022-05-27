@@ -11,16 +11,19 @@ Sonic RightSonic(PIN_SONIC_RIGHT_ECHO, PIN_SONIC_RIGHT_TRIG);
 Sonic LeftSonic(PIN_SONIC_LEFT_ECHO, PIN_SONIC_LEFT_TRIG);
 Motors DCMotors(PIN_M1F, PIN_M1B, PIN_M2F, PIN_M2B, PIN_M1S, PIN_M2S);
 
-#ifdef IS_TEAM_BLUE
-const ColorSensor::Colors TeamColor = ColorSensor::Colors::Blue;
-const ColorSensor::Colors RivalColor = ColorSensor::Colors::Red;
-#else
-const ColorSensor::Colors TeamColor = ColorSensor::Colors::Red;
-const ColorSensor::Colors RivalColor = ColorSensor::Colors::Blue;
-#endif
+
+ColorSensor::Colors TeamColor;
+ColorSensor::Colors RivalColor;
 
 void setup(){
-  //Call all the setup functions here
+  if (digitalRead(PIN_IS_TEAM_BLUE)) {
+    TeamColor = ColorSensor::Colors::Blue;
+    RivalColor = ColorSensor::Colors::Red;
+  } else {
+    TeamColor = ColorSensor::Colors::Red;
+    RivalColor = ColorSensor::Colors::Blue;
+  }
+
   Color1.setup();
   Color2.setup();
 
