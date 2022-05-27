@@ -1,4 +1,6 @@
 namespace Servos {
+    extern int puck_count;
+
     void setup_servos();
 
     namespace S1 {
