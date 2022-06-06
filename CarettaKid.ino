@@ -62,11 +62,11 @@ void loop(){
   int RivalPuck = Color1.read_color(RivalColor);
   int BaseColor = Color2.read_color(TeamColor);
 
-  //Servo
-  if (OurPuck > COLOR_THRESHOLD) {
-    Servos::S1::take_it();
-  } else if (RivalPuck > COLOR_THRESHOLD) {
+  //Servos
+  if (RivalPuck > COLOR_THRESHOLD || Servos::puck_count >= 5) {
     Servos::S1::dont_take_it();
+  } else if (OurPuck > COLOR_THRESHOLD) {
+    Servos::S1::take_it();
   }
 
   if (BaseColor > COLOR_THRESHOLD) {
