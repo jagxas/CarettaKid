@@ -73,9 +73,12 @@ void loop(){
     
   } 
   else if (RivalPuck > COLOR_THRESHOLD && PreviousPuck < COLOR_THRESHOLD) {
+    if(RivalStore == 5){DCMotors.step_back();}
+    else{
     Servos::S1::dont_take_it();
     RivalStore += 1;
     PreviousPuck = RivalPuck;
+    }
   }
 
   if (BaseColor > COLOR_THRESHOLD) {
