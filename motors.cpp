@@ -71,7 +71,12 @@ void Motors::MotorStateMachine::reset_timer() {
 }
 
 bool Motors::MotorStateMachine::poll_and_switch() {
+	if (current == None) {
+		current = cont;
+		return true;
+	}
 	if (durations[current] == -1) return false;
+	States old = current;
 	unsigned long newtime = millis();
 
 	if (time - newtime >= durations[current]) {
