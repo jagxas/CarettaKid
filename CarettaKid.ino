@@ -62,6 +62,8 @@ void loop(){
   } else if (PuckColor == TeamColor) {
     if (Servos::our_count < 5) {
       Servos::S1::take_ours();
+    } else {
+      DCMotors.force_back_right();
     }
   } else {
     Servos::S1::finish_taking();
