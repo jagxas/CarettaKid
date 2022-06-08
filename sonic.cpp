@@ -19,7 +19,6 @@ double Sonic::distance(){
   digitalWrite(pin_trig,LOW);
   Time = pulseIn(pin_echo,HIGH);
   Distance = Time / 58.2;
-  delay(50);
   
   if(Distance>=DISTANCE_MAX || Distance<=DISTANCE_MIN){
     return 0;
