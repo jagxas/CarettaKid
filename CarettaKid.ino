@@ -47,6 +47,8 @@ void loop(){
     DCMotors.follow_the_walls_mode();
   }
 
+  DCMotors.main_loop();
+
   //Color
   ColorSensor::Colors PuckColor = Color1.sync_color();
   ColorSensor::Colors BaseColor = Color2.sync_color();
