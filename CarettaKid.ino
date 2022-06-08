@@ -33,7 +33,7 @@ void setup(){
   LeftSonic.setup();
 
   Servos::setup_servos();
-  
+
   Serial.begin(9600);
 }
 
@@ -47,8 +47,6 @@ void loop(){
     DCMotors.follow_the_walls_mode();
   }
 
-  DCMotors.main_loop();
-
   //Color
   ColorSensor::Colors PuckColor = Color1.sync_color();
   ColorSensor::Colors BaseColor = Color2.sync_color();
@@ -59,6 +57,7 @@ void loop(){
       Servos::S1::take_rival();
     } else {
       //Step back and turn right
+      DCMotors.force_back_right();
     }
   } else if (PuckColor == TeamColor) {
     if (Servos::our_count < 5) {
@@ -73,4 +72,6 @@ void loop(){
   } else {
     Servos::S2::close();
   }
+
+  DCMotors.main_loop();
 }

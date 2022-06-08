@@ -47,8 +47,15 @@ void Motors::step_back(){
 void Motors::follow_the_walls_mode() {
 	MSM.continuous_schedule(MotorStateMachine::States::FollowTheWallsDecide);
 }
+
 void Motors::go_around_mode() {
 	MSM.continuous_schedule(MotorStateMachine::States::GoAroundDecide);
+}
+
+//Force the robot to stop whatever it is doing with its motors and step away from that puck!
+void Motors::force_back_right() {
+	MSM.current = MotorStateMachine::States::RivalPuckStepBack;
+	MSM.reset_timer();
 }
 
 Motors::MotorStateMachine::MotorStateMachine() : time(0), current(None), cont(None) {
@@ -113,10 +120,12 @@ bool Motors::step() {
 		case States::GoAroundCruise:
 			cruise();	
 		break;
+		case States::RivalPuckStepBack:
 		case States::FollowTheWallsStepBack:
 		case States::GoAroundStepBack:
 			step_back();
 		break;
+		case States::RivalPuckTurnRight:
 		case States::FollowTheWallsTurnRight:
 		case States::GoAroundTurnRight:
 			turn_right();
@@ -146,6 +155,8 @@ const int Motors::MotorStateMachine::durations[States::LENGTH] = {
 	100,				//FollowTheWallsCruise,
 	100,				//FollowTheWallsStepBack,
 	200,				//FollowTheWallsTurnRight,
+	100,				//RivalPuckStepBack,
+	200,				//RivalPuckTurnRight,
 };
 
 const Motors::MotorStateMachine::States Motors::MotorStateMachine::next[States::LENGTH] = {
@@ -157,5 +168,7 @@ const Motors::MotorStateMachine::States Motors::MotorStateMachine::next[States::
 	States::None,							//FollowTheWallsDecide, -> (FollowTheWallsCruise | FollowTheWallsStepBack)
 	States::None,							//FollowTheWallsCruise,
 	States::FollowTheWallsTurnRight,		//FollowTheWallsStepBack,
-	States::None							//FollowTheWallsTurnRight,
+	States::None,							//FollowTheWallsTurnRight,
+	States::RivalPuckTurnRight,				//RivalPuckStepBack,
+	States::None							//RivalPuckTurnRight,
 };

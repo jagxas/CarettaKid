@@ -11,6 +11,7 @@ class Motors{
     void follow_the_walls_mode();
     void go_around_mode();
     void main_loop();
+    void force_back_right();
     
   private:
     Sonic *const left;
@@ -40,6 +41,9 @@ class Motors{
           FollowTheWallsCruise,
           FollowTheWallsStepBack,
           FollowTheWallsTurnRight,
+
+          RivalPuckStepBack,
+          RivalPuckTurnRight,
 
           LENGTH
         };
