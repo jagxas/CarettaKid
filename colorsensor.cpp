@@ -21,9 +21,9 @@ ColorSensor::Colors ColorSensor::read_color() {
 	int RedValue = map(RedPW, RED_MIN, RED_MAX, 255, 0);
 	
 	//Hmm
-	if(BlueValue > RedValue && ((BlueValue-RedValue) >= 30) && RedValue < 110) { //Rules can change depending upon calibration values
+	if(BlueValue > 70 && RedValue < 50) { //Rules can change depending upon calibration values
 		return Colors::Blue;
-	} else if (BlueValue < RedValue && RedValue > 150 && (RedValue-BlueValue >= 30)) { //Rules can change depending upon calibration values
+	} else if (RedValue > 150 && BlueValue < 80) { //Rules can change depending upon calibration values
 		return Colors::Red;
 	} else {
 		return Colors::None;
