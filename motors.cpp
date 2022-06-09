@@ -31,7 +31,7 @@ void Motors::turn_right(){
 	digitalWrite(pin_m2f, LOW);
 	digitalWrite(pin_m2b, LOW);
 
-	digitalWrite(pin_m1s, TURNING_SPEED);	
+	analogWrite(pin_m1s, TURNING_SPEED);	
 }
 
 void Motors::step_back(){
