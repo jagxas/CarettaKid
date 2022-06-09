@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 
-class Sonic{
+class Sonic {
 
   public:
     Sonic(int EchoPin, int TrigPin);
