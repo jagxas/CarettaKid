@@ -10,10 +10,10 @@
 #define BLUE_MAX 191
 #define BLUE_MIN 29
 
-#define CORRECT_PUCK_ANGLE 100
-#define WRONG_PUCK_ANGLE 200
-#define OPEN_ANGLE 90
-#define CLOSE_ANGLE 0
+#define CORRECT_PUCK_ANGLE 130
+#define WRONG_PUCK_ANGLE 10
+#define OPEN_ANGLE 130
+#define CLOSE_ANGLE 23
 
 //TODO: Determine speeds
 
